@@ -1,0 +1,172 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Student {
+    private String id;
+    private String name;
+    private int age;
+    private String gender;
+
+    public Student(String id, String name, int age, String gender) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+}
+
+class StudentManager {
+    private List<Student> students;
+
+    public StudentManager() {
+        this.students = new ArrayList<>();
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
+    public Student findStudentById(String id) {
+        for (Student student : students) {
+            if (student.getId().equals(id)) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    public void updateStudent(Student student) {
+        Student existingStudent = findStudentById(student.getId());
+        if (existingStudent != null) {
+            existingStudent.setName(student.getName());
+            existingStudent.setAge(student.getAge());
+            existingStudent.setGender(student.getGender());
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+
+    public void deleteStudent(String id) {
+        Student student = findStudentById(id);
+        if (student != null) {
+            students.remove(student);
+            System.out.println("Student deleted successfully.");
+        } else {
+            System.out.println("Student not found.");
+        }
+    }
+
+    public void printAllStudents() {
+        System.out.println("All Students:");
+        for (Student student : students) {
+            System.out.println("ID: " + student.getId() +
+                               ", Name: " + student.getName() +
+                               ", Age: " + student.getAge() +
+                               ", Gender: " + student.getGender());
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        StudentManager studentManager = new StudentManager();
+
+        while (true) {
+            System.out.println("\n1. Add Student");
+            System.out.println("2. Find Student");
+            System.out.println("3. Update Student");
+            System.out.println("4. Delete Student");
+            System.out.println("5. Print All Students");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter student ID: ");
+                    String id = scanner.next();
+                    System.out.print("Enter student name: ");
+                    String name = scanner.next();
+                    System.out.print("Enter student age: ");
+                    int age = scanner.nextInt();
+                    System.out.print("Enter student gender: ");
+                    String gender = scanner.next();
+                    studentManager.addStudent(new Student(id, name, age, gender));
+                    break;
+                case 2:
+                    System.out.print("Enter student ID: ");
+                    id = scanner.next();
+                    Student student = studentManager.findStudentById(id);
+                    if (student != null) {
+                        System.out.println("Student found:");
+                        System.out.println("ID: " + student.getId() +
+                                           ", Name: " + student.getName() +
+                                           ", Age: " + student.getAge() +
+                                           ", Gender: " + student.getGender());
+                    } else {
+                        System.out.println("Student not found.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter student ID: ");
+                    id = scanner.next();
+                    student = studentManager.findStudentById(id);
+                    if (student != null) {
+                        System.out.print("Enter updated name: ");
+                        name = scanner.next();
+                        System.out.print("Enter updated age: ");
+                        age = scanner.nextInt();
+                        System.out.print("Enter updated gender: ");
+                        gender = scanner.next();
+                        studentManager.updateStudent(new Student(id, name, age, gender));
+                    } else {
+                        System.out.println("Student not found.");
+                    }
+                    break;
+                case 4:
+                    System.out.print("Enter student ID: ");
+                    id = scanner.next();
+                    studentManager.deleteStudent(id);
+                    break;
+                case 5:
+                    studentManager.printAllStudents();
+                    break;
+                case 6:
+                    System.out.println("Exiting program...");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+    }
+}
